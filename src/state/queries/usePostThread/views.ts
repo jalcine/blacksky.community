@@ -77,7 +77,8 @@ export function threadPost({
   const modui = moderation.ui('contentList')
   const blurred = modui.blur || modui.filter
   const muted = (modui.blurs[0] || modui.filters[0])?.type === 'muted'
-  const hiddenByThreadgate = threadgateHiddenReplies.has(uri)
+  const hiddenByThreadgate =
+    threadgateHiddenReplies.has(uri) || value.hiddenByThreadgate
   const isOwnPost = value.post.author.did === moderationOpts.userDid
   const isBlurred = (hiddenByThreadgate || blurred || muted) && !isOwnPost
   return {
