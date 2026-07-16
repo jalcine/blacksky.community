@@ -432,6 +432,9 @@ export function PostThread({uri}: {uri: string}) {
                 topBorder: index === 0,
               }}
               onPostSuccess={optimisticOnPostReply}
+              replyCountOverride={thread.data.visibleReplyCounts?.get(
+                item.uri,
+              )}
             />
           )
         } else if (item.depth === 0) {
@@ -461,6 +464,9 @@ export function PostThread({uri}: {uri: string}) {
                 threadgateRecord={thread.data.threadgate?.record ?? undefined}
                 onPostSuccess={optimisticOnPostReply}
                 postSource={anchorPostSource}
+                replyCountOverride={thread.data.visibleReplyCounts?.get(
+                  item.uri,
+                )}
               />
             </View>
           )
@@ -474,6 +480,9 @@ export function PostThread({uri}: {uri: string}) {
                   moderation: thread.state.otherItemsVisible && item.depth > 0,
                 }}
                 onPostSuccess={optimisticOnPostReply}
+                replyCountOverride={thread.data.visibleReplyCounts?.get(
+                  item.uri,
+                )}
               />
             )
           } else {
@@ -485,6 +494,9 @@ export function PostThread({uri}: {uri: string}) {
                   moderation: thread.state.otherItemsVisible && item.depth > 0,
                 }}
                 onPostSuccess={optimisticOnPostReply}
+                replyCountOverride={thread.data.visibleReplyCounts?.get(
+                  item.uri,
+                )}
               />
             )
           }

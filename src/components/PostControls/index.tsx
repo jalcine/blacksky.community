@@ -60,6 +60,7 @@ let PostControls = ({
   viaRepost,
   variant,
   forceGoogleTranslate: _forceGoogleTranslate = false,
+  replyCountOverride,
 }: {
   big?: boolean
   post: Shadow<AppBskyFeedDefs.PostView>
@@ -76,6 +77,7 @@ let PostControls = ({
   viaRepost?: {uri: string; cid: string}
   variant?: 'compact' | 'normal' | 'large'
   forceGoogleTranslate?: boolean
+  replyCountOverride?: number
 }): React.ReactNode => {
   const ax = useAnalytics()
   const t = useTheme()
@@ -103,6 +105,7 @@ let PostControls = ({
     post.author.viewer?.blockingByList,
   )
   const replyDisabled = post.viewer?.replyDisabled
+  const replyCount = replyCountOverride ?? post.replyCount
   const {gtPhone} = useBreakpoints()
   const formatPostStatCount = useFormatPostStatCount()
 
@@ -243,7 +246,7 @@ let PostControls = ({
                 : undefined
             }
             label={l({
-              message: `Reply (${plural(post.replyCount || 0, {
+              message: `Reply (${plural(replyCount || 0, {
                 one: '# reply',
                 other: '# replies',
               })})`,
@@ -252,9 +255,9 @@ let PostControls = ({
             })}
             big={big}>
             <PostControlButtonIcon icon={Bubble} />
-            {typeof post.replyCount !== 'undefined' && post.replyCount > 0 && (
+            {typeof replyCount !== 'undefined' && replyCount > 0 && (
               <PostControlButtonText>
-                {formatPostStatCount(post.replyCount)}
+                {formatPostStatCount(replyCount)}
               </PostControlButtonText>
             )}
           </PostControlButton>

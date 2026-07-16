@@ -65,11 +65,13 @@ export function ThreadItemAnchor({
   onPostSuccess,
   threadgateRecord,
   postSource,
+  replyCountOverride,
 }: {
   item: Extract<ThreadItem, {type: 'threadPost'}>
   onPostSuccess?: (data: OnPostSuccessData) => void
   threadgateRecord?: AppBskyFeedThreadgate.Record
   postSource?: PostSource
+  replyCountOverride?: number
 }) {
   const postShadow = usePostShadow(item.value.post)
   const threadRootUri = item.value.post.record.reply?.root?.uri || item.uri
@@ -89,6 +91,7 @@ export function ThreadItemAnchor({
       onPostSuccess={onPostSuccess}
       threadgateRecord={threadgateRecord}
       postSource={postSource}
+      replyCountOverride={replyCountOverride}
     />
   )
 }
@@ -166,6 +169,7 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
   onPostSuccess,
   threadgateRecord,
   postSource,
+  replyCountOverride,
 }: {
   item: Extract<ThreadItem, {type: 'threadPost'}>
   isRoot: boolean
@@ -173,6 +177,7 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
   onPostSuccess?: (data: OnPostSuccessData) => void
   threadgateRecord?: AppBskyFeedThreadgate.Record
   postSource?: PostSource
+  replyCountOverride?: number
 }) {
   const t = useTheme()
   const ax = useAnalytics()
@@ -542,6 +547,7 @@ const ThreadItemAnchorInner = memo(function ThreadItemAnchorInner({
                   feedContext={postSource?.post?.feedContext}
                   reqId={postSource?.post?.reqId}
                   viaRepost={viaRepost}
+                  replyCountOverride={replyCountOverride}
                 />
               </FeedFeedbackProvider>
             </View>

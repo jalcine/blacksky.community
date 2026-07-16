@@ -249,6 +249,42 @@ export function usePostThread({anchor}: {anchor?: string}) {
   ])
 
   /*
+   * Compute a per-post map of viewer-visible reply counts. For each post that
+   * is rendered in the thread, this counts its direct replies that the viewer
+   * can actually see (hydrated + unhydrated), excluding replies that are
+   * blocked, not-found, or hidden behind a collapsed "show other replies"
+   * toggle. This is used to override the server-provided `replyCount` on
+   * `PostControls` so the badge matches what the viewer sees.
+   */
+  const visibleReplyCounts = useMemo(() => {
+    const counts = new Map<string, number>()
+
+    const renderedItems: ThreadItem[] = otherItemsVisible
+      ? [...threadItems, ...otherThreadItems, ...serverOtherThreadItems]
+      : threadItems
+
+    for (const item of renderedItems) {
+      if (item.type !== 'threadPost') continue
+      counts.set(item.uri, item.value.moreReplies || 0)
+    }
+
+    for (const item of renderedItems) {
+      if (item.type !== 'threadPost') continue
+      const parentUri = item.value.post.record.reply?.parent?.uri
+      if (parentUri && counts.has(parentUri)) {
+        counts.set(parentUri, (counts.get(parentUri) || 0) + 1)
+      }
+    }
+
+    return counts
+  }, [
+    threadItems,
+    otherThreadItems,
+    serverOtherThreadItems,
+    otherItemsVisible,
+  ])
+
+  /*
    * Take all three sets of thread items and combine them into a single thread,
    * along with any other thread items required for rendering e.g. "Show more
    * replies" or the reply composer.
@@ -299,6 +335,7 @@ export function usePostThread({anchor}: {anchor?: string}) {
       data: {
         items,
         threadgate,
+        visibleReplyCounts,
       },
       actions: {
         /*
@@ -323,6 +360,7 @@ export function usePostThread({anchor}: {anchor?: string}) {
     setView,
     threadgate,
     items,
+    visibleReplyCounts,
     postThreadQueryKey,
     postThreadOtherQueryKey,
   ])

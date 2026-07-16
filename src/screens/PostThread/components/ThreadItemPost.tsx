@@ -58,6 +58,7 @@ export type ThreadItemPostProps = {
   }
   onPostSuccess?: (data: OnPostSuccessData) => void
   threadgateRecord?: AppBskyFeedThreadgate.Record
+  replyCountOverride?: number
 }
 
 export function ThreadItemPost({
@@ -65,6 +66,7 @@ export function ThreadItemPost({
   overrides,
   onPostSuccess,
   threadgateRecord,
+  replyCountOverride,
 }: ThreadItemPostProps) {
   const postShadow = usePostShadow(item.value.post)
 
@@ -79,6 +81,7 @@ export function ThreadItemPost({
       threadgateRecord={threadgateRecord}
       overrides={overrides}
       onPostSuccess={onPostSuccess}
+      replyCountOverride={replyCountOverride}
     />
   )
 }
@@ -188,6 +191,7 @@ const ThreadItemPostInner = memo(function ThreadItemPostInner({
   overrides,
   onPostSuccess,
   threadgateRecord,
+  replyCountOverride,
 }: ThreadItemPostProps & {
   postShadow: Shadow<AppBskyFeedDefs.PostView>
 }) {
@@ -362,6 +366,7 @@ const ThreadItemPostInner = memo(function ThreadItemPostInner({
                 onPressReply={onPressReply}
                 logContext="PostThreadItem"
                 threadgateRecord={threadgateRecord}
+                replyCountOverride={replyCountOverride}
               />
               <DebugFieldDisplay subject={post} />
             </View>

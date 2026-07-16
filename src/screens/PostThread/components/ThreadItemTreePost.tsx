@@ -56,6 +56,7 @@ export function ThreadItemTreePost({
   overrides,
   onPostSuccess,
   threadgateRecord,
+  replyCountOverride,
 }: {
   item: Extract<ThreadItem, {type: 'threadPost'}>
   overrides?: {
@@ -64,6 +65,7 @@ export function ThreadItemTreePost({
   }
   onPostSuccess?: (data: OnPostSuccessData) => void
   threadgateRecord?: AppBskyFeedThreadgate.Record
+  replyCountOverride?: number
 }) {
   const postShadow = usePostShadow(item.value.post)
 
@@ -80,6 +82,7 @@ export function ThreadItemTreePost({
       threadgateRecord={threadgateRecord}
       overrides={overrides}
       onPostSuccess={onPostSuccess}
+      replyCountOverride={replyCountOverride}
     />
   )
 }
@@ -244,6 +247,7 @@ const ThreadItemTreePostInner = memo(function ThreadItemTreePostInner({
   overrides,
   onPostSuccess,
   threadgateRecord,
+  replyCountOverride,
 }: {
   item: Extract<ThreadItem, {type: 'threadPost'}>
   postShadow: Shadow<AppBskyFeedDefs.PostView>
@@ -253,6 +257,7 @@ const ThreadItemTreePostInner = memo(function ThreadItemTreePostInner({
   }
   onPostSuccess?: (data: OnPostSuccessData) => void
   threadgateRecord?: AppBskyFeedThreadgate.Record
+  replyCountOverride?: number
 }): React.ReactNode {
   const {openComposer} = useOpenComposer()
   const {currentAccount} = useSession()
@@ -385,6 +390,7 @@ const ThreadItemTreePostInner = memo(function ThreadItemTreePostInner({
                     onPressReply={onPressReply}
                     logContext="PostThreadItem"
                     threadgateRecord={threadgateRecord}
+                    replyCountOverride={replyCountOverride}
                   />
                   <DebugFieldDisplay subject={post} />
                 </View>
